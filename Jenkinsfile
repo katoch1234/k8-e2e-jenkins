@@ -7,7 +7,7 @@ pipeline {
         maven 'Maven3'
     }
     stages{
-        stage("clean workspce") {
+        stage("clean workspace") {
             steps{
                 cleanWs()
             }
@@ -16,6 +16,17 @@ pipeline {
         stage('Checkout from Git') {
             steps {
                 git branch: 'main', credentialsId: 'github', url: 'https://github.com/katoch1234/k8-e2e-jenkins.git'
+            }
+        }
+
+        stage('Build application') {
+            steps {
+                sh "mvn clean package"
+            }
+        }
+        stage('Test the application') {
+            steps {
+                sh "mvn test"
             }
         }
         }
