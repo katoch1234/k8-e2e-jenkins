@@ -15,7 +15,7 @@ pipeline {
         
         stage('Checkout from Git') {
             steps {
-                git branch: 'main', CredentialsId: 'github', url: 'https://github.com/katoch1234/k8-e2e-jenkins.git'
+                git branch: 'main', credentialsId: 'github', url: 'https://github.com/katoch1234/k8-e2e-jenkins.git'
             }
         }
         }
