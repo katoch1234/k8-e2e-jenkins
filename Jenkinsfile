@@ -15,6 +15,7 @@ pipeline {
         REPOSITORY_URL = "595496445232.dkr.ecr.us-east-1.amazonaws.com/vaibhav"
         TASK_DEFINITION = "java-app"
         CONTAINER_NAME = "java-app"
+        ECR_REPO_NAME = "vaibhav"
     }
     stages{
         stage("clean workspace") {
