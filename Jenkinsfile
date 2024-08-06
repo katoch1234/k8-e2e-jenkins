@@ -6,6 +6,13 @@ pipeline {
         jdk 'Java17'
         maven 'Maven3'
     }
+    environment {
+        AWS_ACCOUNT_ID = "595496445232"
+        AWS_DEFAULT_REGION = "us-east-1"
+        IMAGE_REPO_NAME = "vaibhav"
+        IMAGE_TAG = "${BUILD_NUMBER}"
+        REPOSITORY_URL = "595496445232.dkr.ecr.us-east-1.amazonaws.com/vaibhav"
+    }
     stages{
         stage("clean workspace") {
             steps{
@@ -43,6 +50,26 @@ pipeline {
                 script{
                 waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube-jenkins'
             }
+            }
+        }
+
+        stage (Logging to ECR) {
+            steps {
+                script {
+                    sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com"
+                }
+            }
+        }
+
+        stage (Docker Build) {
+            steps {
+                sh "printenv"
+                sh "docker build -t ecr-demo ."
+            }
+        }
+        stage (Docker Push) {
+            steps {
+                sh "docker build -t ecr-demo ."
             }
         }
         }
