@@ -8,7 +8,7 @@ pipeline {
     }
     environment {
         AWS_ACCOUNT_ID = "595496445232"
-        AWS_DEFAULT_REGION = "us-east-1"
+        AWS_REGION = "us-east-1"
         IMAGE_REPO_NAME = "vaibhav"
         IMAGE_NAME = "demo-app"
         IMAGE_TAG = "${BUILD_NUMBER}"
@@ -60,7 +60,7 @@ pipeline {
             steps {
                 script {
                     sh "whoami"
-                    sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com"
+                    sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com"
                 }
             }
         }
