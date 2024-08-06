@@ -67,10 +67,5 @@ pipeline {
                 sh "docker build -t ecr-demo ."
             }
         }
-      #  stage (Docker Push) {
-      #      steps {
-      #          sh "docker build -t ecr-demo ."
-      #      }
-      #  }
         }
 }
