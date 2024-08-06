@@ -68,5 +68,13 @@ pipeline {
                 sh "docker build -t ecr-demo ."
             }
         }
+        stage ('Docker Push') {
+            steps {
+                script{
+                sh "docker tag vaibhav:latest 595496445232.dkr.ecr.us-east-1.amazonaws.com/vaibhav:${BUILD_NUMBER}"
+                sh "docker push 595496445232.dkr.ecr.us-east-1.amazonaws.com/vaibhav:${BUILD_NUMBER}"
+            }
+            }
+        }
         }
 }
