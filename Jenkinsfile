@@ -58,12 +58,12 @@ pipeline {
             }
         }
 
-        stage ('Docker Build') {
-            steps {
-                sh "printenv"
-                sh "docker build -t ${IMAGE_NAME} ."
-            }
-        }
+    //    stage ('Docker Build') {
+    //        steps {
+    //            sh "printenv"
+    //            sh "docker build -t ${IMAGE_NAME} ."
+    //        }
+    //    }
 
          stage ('Logging to ECR') {
             steps {
@@ -90,6 +90,7 @@ pipeline {
                      dir(TERRAFORM_DIR) {
                         sh "terraform init"
                         sh "terraform plan"
+                        sh "terraform apply"
                      }
 
                 }
