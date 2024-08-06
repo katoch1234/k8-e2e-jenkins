@@ -13,6 +13,8 @@ pipeline {
         IMAGE_NAME = "demo-app"
         IMAGE_TAG = "${BUILD_NUMBER}"
         REPOSITORY_URL = "595496445232.dkr.ecr.us-east-1.amazonaws.com/vaibhav"
+        TASK_DEFINITION = "java-app"
+        CONTAINER_NAME = "java-app"
     }
     stages{
         stage("clean workspace") {
@@ -77,5 +79,20 @@ pipeline {
             }
             }
         }
+
+         stage('Deploy New Image') {
+            steps {
+                script {
+                    // Update the ECS task definition with the new image
+                    sh """
+                    aws ecs register-task-definition --family ${TASK_DEFINITION} \
+                        --container-definitions '[
+                            {
+                                "name": "${CONTAINER_NAME}",
+                                "image": "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:${IMAGE_TAG}",
+                                ...
+                            }
+                        ]'
+                    """
         }
 }
