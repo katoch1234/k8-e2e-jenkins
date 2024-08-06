@@ -10,6 +10,7 @@ pipeline {
         AWS_ACCOUNT_ID = "595496445232"
         AWS_DEFAULT_REGION = "us-east-1"
         IMAGE_REPO_NAME = "vaibhav"
+        IMAGE_NAME = "demo-app"
         IMAGE_TAG = "${BUILD_NUMBER}"
         REPOSITORY_URL = "595496445232.dkr.ecr.us-east-1.amazonaws.com/vaibhav"
     }
@@ -65,13 +66,13 @@ pipeline {
         stage ('Docker Build') {
             steps {
                 sh "printenv"
-                sh "docker build -t ecr-demo ."
+                sh "docker build -t ${IMAGE_NAME} ."
             }
         }
         stage ('Docker Push') {
             steps {
                 script{
-                sh "docker tag vaibhav:latest 595496445232.dkr.ecr.us-east-1.amazonaws.com/vaibhav:${BUILD_NUMBER}"
+                sh "docker tag ${IMAGE_NAME}:latest 595496445232.dkr.ecr.us-east-1.amazonaws.com/vaibhav:${BUILD_NUMBER}"
                 sh "docker push 595496445232.dkr.ecr.us-east-1.amazonaws.com/vaibhav:${BUILD_NUMBER}"
             }
             }
