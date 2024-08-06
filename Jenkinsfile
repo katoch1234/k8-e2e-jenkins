@@ -58,7 +58,14 @@ pipeline {
             }
         }
 
-        stage ('Logging to ECR') {
+        stage ('Docker Build') {
+            steps {
+                sh "printenv"
+                sh "docker build -t ${IMAGE_NAME} ."
+            }
+        }
+
+         stage ('Logging to ECR') {
             steps {
                 script {
                     sh "whoami"
@@ -67,12 +74,6 @@ pipeline {
             }
         }
 
-        stage ('Docker Build') {
-            steps {
-                sh "printenv"
-                sh "docker build -t ${IMAGE_NAME} ."
-            }
-        }
         stage ('Docker Push') {
             steps {
                 script{
@@ -88,6 +89,7 @@ pipeline {
                   // initialize terraform
                      dir(TERRAFORM_DIR) {
                         sh "terraform init"
+                        sh "terraform plan"
                      }
 
                 }
