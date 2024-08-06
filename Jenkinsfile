@@ -16,6 +16,7 @@ pipeline {
         TASK_DEFINITION = "java-app"
         CONTAINER_NAME = "java-app"
         ECR_REPO_NAME = "vaibhav"
+        TERRAFORM_DIR = "terraform"
     }
     stages{
         stage("clean workspace") {
@@ -81,50 +82,14 @@ pipeline {
             }
         }
 
-         stage('Deploy New Image') {
+         stage('Terraform Init') {
             steps {
                 script {
-                    // Update the ECS task definition with the new image
-                    sh """
-                    aws ecs register-task-definition --family ${TASK_DEFINITION} \
-                        --container-definitions '[
-                            {
-                                "name": "${CONTAINER_NAME}",
-                                "image": "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:${IMAGE_TAG}",                     
-                                "cpu": 0,
-                                "portMappings": [
-                                     {
-                                            "name": "java-8080",
-                                            "containerPort": 8080,
-                                            "hostPort": 8080,
-                                            "protocol": "tcp",
-                                            "appProtocol": "http"
-                }
-                ],
-                    "essential": true,
-                    "environment": [],
-                    "environmentFiles": [],
-                    "mountPoints": [],
-                    "volumesFrom": [],
-                    "ulimits": [],
-                    "systemControls": []
-                   }
-                ],
-            "taskRoleArn": "arn:aws:iam::595496445232:role/ecsTaskExecutionRole",
-            "executionRoleArn": "arn:aws:iam::595496445232:role/ecsTaskExecutionRole",
-            "networkMode": "awsvpc",
-            "requiresCompatibilities": [
-                "EC2"
-            ],
-            "cpu": "256",
-            "memory": "512",
-            "runtimePlatform": {
-                "cpuArchitecture": "X86_64",
-                "operatingSystemFamily": "LINUX"
-            }
-                                    }
-                                ]'
-            """
+                  // initialize terraform
+                     dir(TERRAFORM_DIR) {
+                        sh "terraform init"
+                     }
+
                 }
 }
          }
